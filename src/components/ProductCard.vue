@@ -2,11 +2,19 @@
 import { RouterLink } from 'vue-router'
 import type { Product } from '../types/product'
 import { formatPrice } from '../utils/productHelpers'
+import { useProductsStore } from '../stores/products';
+import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
 
-const { layout = 'carousel' } = defineProps<{
+const props = defineProps<{
   product: Product
   layout?: 'carousel' | 'grid'
 }>()
+
+const  store = useProductsStore();
+const { addVisitedProduct } = store;
+const { getVisitedProducts } = storeToRefs(store);
+const isProductVisited = computed(() => getVisitedProducts.value.includes(props.product.id.toString()));
 </script>
 
 <template>
@@ -16,6 +24,7 @@ const { layout = 'carousel' } = defineProps<{
   >
     <RouterLink
       :to="{ name: 'product-detail', params: { id: product.id } }"
+      @click="addVisitedProduct(product.id)"
       class="flex h-full min-h-0 flex-col focus-visible:rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
     >
       <div
@@ -42,6 +51,9 @@ const { layout = 'carousel' } = defineProps<{
         <p class="text-xs text-muted" aria-label="Rating">
           ★ {{ product.rating.rate.toFixed(1) }}
           <span class="text-slate-400">({{ product.rating.count }})</span>
+          <div v-if="isProductVisited" class="mt-1 text-xs text-green-600">
+            Visited
+          </div>
         </p>
       </div>
     </RouterLink>

@@ -17,6 +17,7 @@ export const useProductsStore = defineStore('products', () => {
   const error = ref<string | null>(null)
   const detailLoading = ref(false)
   const detailError = ref<string | null>(null)
+  const visitedProducts = ref<string[]>([])
 
   const sortedProducts = computed(() => sortProductsByRating(products.value))
 
@@ -85,6 +86,12 @@ export const useProductsStore = defineStore('products', () => {
     await loadProducts(true)
   }
 
+  function addVisitedProduct(id: number) {
+    if (!visitedProducts.value.includes(id.toString())) {
+      visitedProducts.value.push(id.toString())
+    }
+  }
+
   function $resetForTests() {
     products.value = []
     categories.value = [...CATEGORY_ORDER]
@@ -94,6 +101,10 @@ export const useProductsStore = defineStore('products', () => {
     detailLoading.value = false
     detailError.value = null
   }
+
+  const getVisitedProducts = computed(() => {
+    return visitedProducts.value
+  })
 
   return {
     products,
@@ -107,11 +118,13 @@ export const useProductsStore = defineStore('products', () => {
     filteredProducts,
     productsByCategory,
     hasSearch,
+    getVisitedProducts,
     setSearchQuery,
     getProductById,
     loadProducts,
     reloadProducts,
     loadProductDetail,
+    addVisitedProduct,  
     $resetForTests,
   }
 })
