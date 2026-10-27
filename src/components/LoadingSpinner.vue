@@ -5,15 +5,14 @@ defineProps<{
 </script>
 
 <template>
-  <div
+  <output
     class="flex flex-col items-center justify-center gap-3 py-12"
-    role="status"
     aria-live="polite"
   >
-    <div
+    <span
       class="h-10 w-10 animate-spin rounded-full border-4 border-brand-100 border-t-brand-600"
       aria-hidden="true"
     />
-    <p class="text-sm text-muted">{{ label ?? 'Loading…' }}</p>
-  </div>
+    <span class="text-sm text-muted">{{ label ?? 'Loading…' }}</span>
+  </output>
 </template>

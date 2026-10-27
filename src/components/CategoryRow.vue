@@ -27,7 +27,11 @@ function scrollBy(direction: -1 | 1) {
       <h2 :id="`cat-${category}`" class="text-lg font-bold text-ink sm:text-xl">
         {{ title }}
       </h2>
-      <div class="flex gap-2" role="group" :aria-label="`${title} scroll controls`">
+      <nav
+        v-if="products.length > 4"
+        class="flex gap-2 md:block hidden"
+        :aria-label="`${title} scroll controls`"
+      >
         <button
           type="button"
           class="cursor-pointer rounded-lg border border-slate-200 bg-white p-2 text-ink shadow-sm hover:bg-slate-50 disabled:cursor-not-allowed"
@@ -44,24 +48,21 @@ function scrollBy(direction: -1 | 1) {
         >
           <span aria-hidden="true">→</span>
         </button>
-      </div>
+      </nav>
     </div>
 
-    <div
+    <ul
       ref="scrollerRef"
       class="flex items-stretch gap-4 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      tabindex="0"
-      role="list"
       :aria-label="`${title} products`"
     >
-      <div
+      <li
         v-for="product in products"
         :key="product.id"
         class="w-56 min-w-[14rem] max-w-[14rem] shrink-0 snap-start sm:w-64 sm:min-w-[16rem] sm:max-w-[16rem]"
-        role="listitem"
       >
         <ProductCard :product="product" />
-      </div>
-    </div>
+      </li>
+    </ul>
   </section>
 </template>
